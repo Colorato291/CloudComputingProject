@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="upload">
+        <h2>Iebraukšana</h2>
+        <input type="file" id="fileInput"><br><br>
+        <button onclick="uploadFile('entry')">Upload</button>
+    </div>
+    
+    <div id="upload">
+        <h2>Izbraukšana</h2>
+        <input type="file" id="fileInput"><br><br>
+        <button onclick="uploadFile('exit')">Upload</button>
+    </div>
+
+    <div id="newUser">
+        <h2>Izbraukšana</h2>
+        <form id="newUserForm">
+            <label for="name">Name</label><br>
+            <input type="text" name="name" placeholder="John"><br><br>
+    
+            <label for="surname">Surname</label><br>
+            <input type="text" name="surname" placeholder="Doe"><br><br>
+    
+            <label for="email">E-mail address</label><br>
+            <input type="text" name="email" placeholder="john.doe@example.com"><br><br>
+    
+            <label for="plate">Vehicle Plate</label><br>
+            <input type="text" name="plate" placeholder="AB1234"><br><br>
+            <button type="submit">Submit</button><br>
+    </div>
+
+    <div id="status">
+    </div>
+    
+    <script src="./main.js"></script>
+</body>
+</html>
