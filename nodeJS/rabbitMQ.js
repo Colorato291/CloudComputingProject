@@ -1,4 +1,4 @@
-const amqp = require('amqplib/callback_api');
+const amqp = require('amqplib');
 
 // Connection caching
 let connection;
@@ -9,24 +9,23 @@ async function connectToMQ() {
     if (connection && channel) return;
 
     try {
-        connection = await amqp.connect('amqp://localhost');
+        connection = await amqp.connect('amqp://RabbitMQ-queue:5672');
         channel = await connection.createChannel();
 
         await channel.assertQueue(queue, { durable: true });
 
-        console.log('RabbitMQ connected');
+        console.log('RabbitMQ: Connected to queue');
     } catch (error) {
         console.error('Error creating connection:', error);
     }
-    
 }
 
-async function sendToQueue(message) {
+async function sendToQueue(inputData) {
     try {
         if (!channel || !connection) await connectToMQ();
-        const data = JSON.stringify(message);
-        channel.sendToQueue(queue, data, { persistent: true });
-        console.log('Message sent to queue');
+        const data = JSON.stringify(inputData);
+        channel.sendToQueue(queue, Buffer.from(data), { persistent: true });
+        console.log('RabbitMQ: Message sent to queue');
     } catch (error) {
         console.error('Error sending message:', error);
     }

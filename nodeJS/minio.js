@@ -1,30 +1,29 @@
 const Minio = require('minio');
 
 const minioClient = new Minio.Client({
-    endPoint: 'localhost',
+    endPoint: 'minio',
     port: 9000,
-    useSSL: false
+    useSSL: false,
+    accessKey: '221RDB026',
+    secretKey: 'password'
 });
 
-const bucketNames = ['entryPlates', 'exitPlates'];
+const bucketNames = ['entryplates', 'exitplates'];
 
 async function checkBuckets() {
-    bucketNames.forEach(name => {
-        minioClient.bucketExists(name, (err) => {
-            if (err && err.code === 'NoSuchBucket') {
-              minioClient.makeBucket(name, (err) => {
-                if (err) console.error('Error creating bucket:', err);
-                else console.log('Bucket created successfully');
-              });
-            } else if (err) {
-              console.error('Error checking bucket existence:', err);
-            } else {
-              console.log('Bucket already exists.');
-            }
-          });
-    });
+  for (const name of bucketNames) {
+      try {
+          const exists = await minioClient.bucketExists(name);
+          if (!exists) {
+              await minioClient.makeBucket(name);
+              console.log(`MinIO: Bucket ${name} created successfully`);
+          } else {
+              console.log(`MinIO: Bucket ${name} already exists`);
+          }
+      } catch (err) {
+          console.error(`MinIO: Error checking or creating bucket ${name}:`, err);
+      }
+  }
 }
 
-checkBuckets();
-
-module.exports = minioClient;
+module.exports = {minioClient, checkBuckets};

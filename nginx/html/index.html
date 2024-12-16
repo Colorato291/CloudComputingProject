@@ -8,18 +8,18 @@
 <body>
     <div id="upload">
         <h2>Iebraukšana</h2>
-        <input type="file" id="fileInput"><br><br>
+        <input type="file" id="entryInput"><br><br>
         <button onclick="uploadFile('entry')">Upload</button>
     </div>
     
     <div id="upload">
         <h2>Izbraukšana</h2>
-        <input type="file" id="fileInput"><br><br>
+        <input type="file" id="exitInput"><br><br>
         <button onclick="uploadFile('exit')">Upload</button>
     </div>
 
     <div id="newUser">
-        <h2>Izbraukšana</h2>
+        <h2>Jauns klients</h2>
         <form id="newUserForm">
             <label for="name">Name</label><br>
             <input type="text" name="name" placeholder="John"><br><br>
@@ -30,12 +30,16 @@
             <label for="email">E-mail address</label><br>
             <input type="text" name="email" placeholder="john.doe@example.com"><br><br>
     
-            <label for="plate">Vehicle Plate</label><br>
-            <input type="text" name="plate" placeholder="AB1234"><br><br>
-            <button type="submit">Submit</button><br>
+            <label for="vehiclePlate">Vehicle Plate</label><br>
+            <input type="text" name="vehiclePlate" placeholder="AB1234"><br><br>
+            <button type="submit">Add User</button><br>
+        </form>
     </div>
 
-    <div id="status">
+    <div id="payForVehicle">
+        <h2>Apmaksat</h2>
+        <input type="text" id="payment" placeholder="AB1234"><br><br>
+        <button onclick="payForVehicle()">Pay</button>
     </div>
     
     <script src="./main.js"></script>

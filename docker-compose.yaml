@@ -1,0 +1,118 @@
+services:
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog-smtp
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - app-network
+
+  minio:
+    image: minio/minio
+    container_name: minio-storage
+    environment:
+      - MINIO_ROOT_USER=221RDB026
+      - MINIO_ROOT_PASSWORD=password
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./minIO/data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: RabbitMQ-queue
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+  openalpr:
+    build:
+      context: ./OpenALPR
+      dockerfile: Dockerfile
+    container_name: OpenALPR-plateReader
+    stdin_open: true
+    tty: true
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    volumes:
+      - ./OpenALPR/tmp:/tmp
+      - ./OpenALPR/config/openalpr.conf:/etc/openalpr/openalpr.conf
+    entrypoint: /bin/bash
+
+  mongodb:
+    image: mongo:latest
+    container_name: MongoDB-db
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=parkingLot
+      - MONGO_INITDB_ROOT_USERNAME=221RDB026
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    networks:
+      - app-network
+    volumes:
+      - ./MongoDB/data:/data/db
+
+  nodejs:
+    build: 
+      context: ./nodeJS
+      dockerfile: Dockerfile
+    container_name: NodeJS-app
+    depends_on:
+      minio:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+      openalpr:
+        condition: service_started
+      mailhog:
+        condition: service_started
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    volumes:
+      - ./OpenALPR/tmp:/tmp
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-webpage
+    ports:
+      - "80:80"
+    depends_on:
+      - nodejs
+    volumes:
+      - ./nginx/html:/usr/share/nginx/html
+    networks:
+      - app-network
+  
+networks:
+  app-network:
+    driver: bridge
