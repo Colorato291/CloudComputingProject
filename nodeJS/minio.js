@@ -1,5 +1,6 @@
 const Minio = require('minio');
 
+// Minio klienta definēšana
 const minioClient = new Minio.Client({
     endPoint: 'minio',
     port: 9000,
@@ -8,8 +9,9 @@ const minioClient = new Minio.Client({
     secretKey: 'password'
 });
 
+// Nepieciešamo bucket nosaukumi
 const bucketNames = ['entryplates', 'exitplates'];
-
+// Funkcija bucket pārbaudei, ja nav, tad izveido
 async function checkBuckets() {
   for (const name of bucketNames) {
       try {
