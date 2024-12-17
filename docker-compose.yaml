@@ -59,6 +59,7 @@ services:
     volumes:
       - ./OpenALPR/tmp:/tmp
       - ./OpenALPR/config/openalpr.conf:/etc/openalpr/openalpr.conf
+      - ./OpenALPR/config/eu.conf:/usr/share/openalpr/runtime_data/config/eu.conf
     entrypoint: /bin/bash
 
   mongodb:
