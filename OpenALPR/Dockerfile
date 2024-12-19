@@ -1,7 +1,7 @@
 FROM openalpr/openalpr
 
 # https://github.com/openalpr/openalpr/issues/766
-
+# https://github.com/openalpr/openalpr/issues/707
 # Kompilēšanas procesam nepieciešamo paplašinājumu ielāde
 RUN apt update && apt install -y libtool automake
 # Tesseract OCR 4.0.0 versijas ielāde un kompilēšana
