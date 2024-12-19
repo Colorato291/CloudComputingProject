@@ -8,12 +8,17 @@ let cachedDB; // Datubāzes savienojuma saglabāšana
 
 async function connectToDB() {
     if (cachedDB) return cachedDB; // Ja savienojums jau ir, izmanto eksistējošo
-    // Pretējā gadījumā izveido jaunu un saglabā to
-    const client = new MongoClient(url);
-    await client.connect();
-    console.log('MongoDB: Connection to DB created');
-    cachedDB = client.db(dbName);
-    return cachedDB;
+    try {
+        // Pretējā gadījumā izveido jaunu un saglabā to
+        const client = new MongoClient(url);
+        await client.connect();
+        console.log('MongoDB: Connection to DB created');
+        cachedDB = client.db(dbName);
+        return cachedDB;
+    } catch (error) {
+        console.error('MongoDB: Error connecting to MongoDB:', error);
+        throw error;
+    }
 }
 
 // Kolekcijas izgūšana
