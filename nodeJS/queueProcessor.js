@@ -3,7 +3,7 @@ const amqp = require('amqplib');
 const {minioClient} = require('./minio');
 const analysePlate = require('./OpenALPR');
 const getCollection = require('./mongodb');
-const sendReciept = require('./MailHog');
+const sendReceipt = require('./MailHog');
 
 // Savienojumu saglabāšana
 let connection;
@@ -66,7 +66,7 @@ async function handleExit(plate, data) {
             const userCollection = await getCollection('users');
             const user = await userCollection.findOne({ vehiclePlate: plate });
             // Nosūta e-pastu
-            await sendReciept(user.email, `Thank you for using our services! Time spent: ${duration}h. Your account has been debited: $${duration * parkingRate}.`)
+            await sendReceipt(user.email, `Thank you for using our services! Time spent: ${duration}h. Your account has been debited: $${duration * parkingRate}.`)
             // Saglabā stāvēšanas sesiju
             await storeSession({vehicle: plate, entry: document.entryTime, exit: data.timeNow, duration: duration, cost: duration * parkingRate});
             // Izdzēš automašīnu no stāvvietā esošajām automašīnām

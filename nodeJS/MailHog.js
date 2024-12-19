@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Funkcija e-pasta nosūtīšanai
-async function sendReciept(recipient, text) {
+async function sendReceipt(recipient, text) {
     await transporter.sendMail({
         from: '"Parking" <parking@coolcat-dev.com>',
         to: recipient,
@@ -17,4 +17,4 @@ async function sendReciept(recipient, text) {
     });
 }
 // Funkcijas eksportēšana
-module.exports = sendReciept;
+module.exports = sendReceipt;
