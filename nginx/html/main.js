@@ -60,7 +60,7 @@ async function addNewUser(event) {
         }
     });
     // API izsaukums
-    fetch(`${endPoint}/newuser/${type}`, {
+    fetch(`${endPoint}/newuser`, {
         method: 'POST',
         mode: 'cors', // CORS režīms, lai novērstu CORS ierobežojumus
         credentials: 'include',
