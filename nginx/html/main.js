@@ -65,9 +65,10 @@ async function addNewUser(event) {
         mode: 'cors', // CORS režīms, lai novērstu CORS ierobežojumus
         credentials: 'include',
         headers: {
+            'Content-Type': 'application/json',
             'Accept': 'application/json',
         },
-        body: JSON.stringify({ data: userData })
+        body: JSON.stringify({data: userData})
     })
     .then(response => {
         if (!response.ok) {
@@ -101,9 +102,10 @@ async function payForVehicle() {
         mode: 'cors', // CORS režīms, lai novērstu CORS ierobežojumus
         credentials: 'include',
         headers: {
+            'Content-Type': 'application/json',
             'Accept': 'application/json',
         },
-        body: JSON.stringify({ plate: plate })
+        body: JSON.stringify({plate: plate})
     })
     .then(response => {
         if (!response.ok) {
